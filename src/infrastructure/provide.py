@@ -1,0 +1,23 @@
+from typing import AsyncIterable
+
+from dishka import Provider, Scope, provide, from_context
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
+
+from src.infrastructure.database import new_session_maker
+from src.settings import Settings
+
+
+class AppProvider(Provider):
+    settings = from_context(provides=Settings, scope=Scope.APP)
+    @provide(scope=Scope.APP)
+    def get_session_maker(self, settings: Settings) -> async_sessionmaker[AsyncSession]:
+        return new_session_maker(settings)
+
+    @provide(scope=Scope.REQUEST)
+    async def get_session(
+        self,
+        session_maker: async_sessionmaker[AsyncSession],
+    ) -> AsyncIterable[AsyncSession]:
+        async with session_maker() as session:
+            yield session
+            await session.commit()
