@@ -2,27 +2,7 @@ from sqlalchemy import String, DefaultClause, DECIMAL, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infrastructure.database import BaseDB
-
-
-class UserDb(BaseDB):
-    __tablename__ = "users"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(
-        String(length=255), unique=True, nullable=False
-    )
-    deposit: Mapped[DECIMAL] = mapped_column(
-        DECIMAL(precision=10, scale=2),
-        default=0,
-        server_default=DefaultClause("0.00"),
-    )
-
-    books: Mapped[list["BookDb"]] = relationship(back_populates="user")
-
-    def __repr__(self) -> str:
-        return f"<User(id={self.id}, email='{self.email}')>"
-
-    def __str__(self) -> str:
-        return self.email
+from src.modules.users.model import UserDb
 
 
 class GenresDb(BaseDB):

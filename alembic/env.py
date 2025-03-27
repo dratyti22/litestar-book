@@ -7,7 +7,8 @@ from sqlalchemy import pool
 from src.infrastructure.database import BaseDB
 from src.settings import settings
 
-from src.infrastructure.db.models import UserDb, GenresDb, BookDb
+from src.modules.books.model import GenresDb, BookDb
+from src.modules.users.model import  UserDb
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
