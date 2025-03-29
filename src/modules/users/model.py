@@ -1,7 +1,10 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import String, DECIMAL, DefaultClause
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.modules.books.model import BookDb
+if TYPE_CHECKING:
+    from src.modules.books.model import BookDb
 from src.infrastructure.database import BaseDB
 
 
