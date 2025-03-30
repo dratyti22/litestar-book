@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
 
+    # SECRET
+    JWT_SECRET: str = "jwt_secret"
+
     @property
     def async_database_url(self) -> str:
         return (

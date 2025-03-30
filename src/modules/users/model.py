@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from litestar.dto import dto_field
 from sqlalchemy import String, DECIMAL, DefaultClause
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,9 +20,9 @@ class UserDb(BaseDB):
         default=0,
         server_default=DefaultClause("0.00"),
     )
-    password: Mapped[str] = mapped_column(String(length=255), nullable=False)
+    password: Mapped[str] = mapped_column(String(length=255), nullable=False, info=dto_field("private"))
 
-    books: Mapped[list["BookDb"]] = relationship(back_populates="user")
+    books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"))
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}')>"

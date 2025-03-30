@@ -5,11 +5,13 @@ description = "Add your description here"
 requires-python = ">=3.11"
 dependencies = [
     "alembic>=1.15.1",
+    "argon2-cffi>=23.1.0",
     "dishka>=1.5.0",
-    "litestar>=2.15.1",
+    "litestar[jwt]>=2.15.1",
     "psycopg>=3.2.6",
     "psycopg2-binary>=2.9.10",
     "pydantic-settings>=2.8.1",
+    "pydantic[email]>=2.10.6",
     "python-slugify>=8.0.4",
     "redis>=5.2.1",
     "ruff>=0.11.2",

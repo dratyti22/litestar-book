@@ -10,7 +10,7 @@ from src.modules.books.schema import GenresDTO, WriteGenreDTO
 class GenreController(Controller):
     path = "/genre"
 
-    @route(http_method=HttpMethod.GET, path="/")
+    @route(http_method=HttpMethod.GET, path="/", exclude_from_auth=True, cached=3600)
     @inject
     async def get_all_genres(self, service: FromDishka[GenreProtocol]) -> list[GenresDTO] | None:
         return await service.get_all_genres()

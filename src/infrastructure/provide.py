@@ -6,11 +6,14 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from src.infrastructure.database import new_session_maker
 from src.modules.books.protocols import GenreProtocol
 from src.modules.books.repository import GenreRepository
+from src.modules.users.protocol import UserProtocol
+from src.modules.users.repository import UserRepository
 from src.settings import Settings
 
 
 class AppProvider(Provider):
     settings = from_context(provides=Settings, scope=Scope.APP)
+
     @provide(scope=Scope.APP)
     def get_session_maker(self, settings: Settings) -> async_sessionmaker[AsyncSession]:
         return new_session_maker(settings)
@@ -28,3 +31,7 @@ class AppProvider(Provider):
     @provide(provides=GenreProtocol, scope=Scope.REQUEST)
     async def get_genre_repo(self, session: AsyncSession) -> GenreProtocol:
         return GenreRepository(session)
+
+    @provide(provides=UserProtocol, scope=Scope.REQUEST)
+    async def get_user_repo(self, session: AsyncSession) -> UserProtocol:
+        return UserRepository(session)

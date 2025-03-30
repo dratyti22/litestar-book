@@ -6,6 +6,7 @@ from litestar.router import Router
 from litestar.stores.redis import RedisStore
 
 from .infrastructure.provide import AppProvider
+from .modules.users.auth import o2auth
 from .settings import settings, Settings
 from .lists_of_addictions import routes_handlers
 
@@ -19,7 +20,8 @@ def get_app() -> Litestar:
     app = Litestar(
         route_handlers=[base_route],
         stores={"redis_backed_store": redis_store},
-        response_cache_config=cache_config
+        response_cache_config=cache_config,
+        on_app_init=[o2auth.on_app_init]
     )
     litestar_integration.setup_dishka(container, app)
     return app
