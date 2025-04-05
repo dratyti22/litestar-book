@@ -32,8 +32,8 @@ class BookDb(BaseDB):
     genre_id: Mapped[int] = mapped_column(ForeignKey("genres.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    genre: Mapped["GenresDb"] = relationship(lazy="joined")
-    user: Mapped["UserDb"] = relationship(back_populates="books")
+    genre: Mapped["GenresDb"] = relationship(lazy="selectin")
+    user: Mapped["UserDb"] = relationship(back_populates="books",lazy="selectin")
 
     def __repr__(self) -> str:
         return f"<Book(id={self.id}, title='{self.title}')>"

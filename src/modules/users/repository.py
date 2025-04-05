@@ -8,14 +8,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.users.model import UserDb
 from src.modules.users.protocol import UserProtocol
-from src.modules.users.schema import RegisterUserDTO, UserResponseDTO, LoginUserDTO
+from src.modules.users.schema import RegisterUserDTO, LoginUserDTO
 
 
 class UserRepository(UserProtocol):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def register(self, data: RegisterUserDTO) -> UserResponseDTO:
+    async def register(self, data: RegisterUserDTO) -> UserDb:
         hasher = PasswordHasher()
         user = UserDb(
             email=str(data.email),
@@ -25,23 +25,20 @@ class UserRepository(UserProtocol):
         self.session.add(user)
         await self.session.commit()
         await self.session.refresh(user, ["books"])
-        return UserResponseDTO.model_validate({
-            "id": user.id,
-            "email": user.email,
-            "deposit": user.deposit,
-            "books": user.books
-        })
+        return user
 
-    async def get_user_by_id(self, user_id: int) -> UserResponseDTO:
+    async def get_user_by_id(self, user_id: int) -> UserDb:
         user = await self.session.get(UserDb, user_id)
-        return UserResponseDTO.model_validate(user)
+        return user
 
-    async def login(self, data: LoginUserDTO) -> int:
+    async def login_user(self, data: LoginUserDTO) -> UserDb:
         hasher = PasswordHasher()
+        print(1)
         result = await self.session.execute(
             select(UserDb).where(UserDb.email == str(data.email)))
+        print(3)
         user = result.scalar_one_or_none()
-
+        print(2)
         if not user or not hasher.verify(
             user.password,
             data.password.get_secret_value(),
@@ -50,5 +47,5 @@ class UserRepository(UserProtocol):
                 detail="Invalid credentials",
                 status_code=HTTP_401_UNAUTHORIZED
             )
-        return user.id
+        return user
 

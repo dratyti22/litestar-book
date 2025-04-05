@@ -22,7 +22,7 @@ class UserDb(BaseDB):
     )
     password: Mapped[str] = mapped_column(String(length=255), nullable=False, info=dto_field("private"))
 
-    books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"))
+    books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"),lazy="selectin")
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}')>"

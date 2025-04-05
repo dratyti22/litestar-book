@@ -3,6 +3,21 @@ revision = 1
 requires-python = ">=3.11"
 
 [[package]]
+name = "advanced-alchemy"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "alembic" },
+    { name = "greenlet" },
+    { name = "sqlalchemy" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a9/d3/749cfeb9ca7d3b821ffdc9676c2f8eca1003723bb49c40e3dfb7c8044968/advanced_alchemy-1.0.2.tar.gz", hash = "sha256:4897d4b73ac426bb4e26291d45970aa4f185dddc163f0805c43a8759a4297671", size = 534943 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/48/25fa671a9912864fc113264eb43e954b4b2e78523d1cd65ab8ad3f9ecb9d/advanced_alchemy-1.0.2-py3-none-any.whl", hash = "sha256:7fc947315b5ec6c987878914fc08d2c059aac38ab097508b9d63840b7dd49834", size = 183332 },
+]
+
+[[package]]
 name = "alembic"
 version = "1.15.1"
 source = { registry = "https://pypi.org/simple" }
@@ -86,6 +101,7 @@ name = "books"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "advanced-alchemy" },
     { name = "alembic" },
     { name = "argon2-cffi" },
     { name = "dishka" },
@@ -102,6 +118,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "advanced-alchemy", specifier = ">=1.0.2" },
     { name = "alembic", specifier = ">=1.15.1" },
     { name = "argon2-cffi", specifier = ">=23.1.0" },
     { name = "dishka", specifier = ">=1.5.0" },
