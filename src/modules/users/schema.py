@@ -4,6 +4,7 @@ from litestar.dto import DTOConfig
 from pydantic import BaseModel, SecretStr, EmailStr
 
 from src.modules.books.schema import BookDTO
+from src.modules.users.role import UserRole
 
 
 class UserResponseDTO(BaseModel):
@@ -11,6 +12,8 @@ class UserResponseDTO(BaseModel):
     email: str
     deposit: Decimal
     books: list[BookDTO] = None
+    is_activate: bool
+    role: UserRole
 
     class Config:
         dto_config = DTOConfig(

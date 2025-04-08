@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 
 from litestar.dto import dto_field
-from sqlalchemy import String, DECIMAL, DefaultClause
+from sqlalchemy import String, DECIMAL, DefaultClause, Boolean, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.modules.users.role import UserRole
 
 if TYPE_CHECKING:
     from src.modules.books.model import BookDb
@@ -21,6 +23,8 @@ class UserDb(BaseDB):
         server_default=DefaultClause("0.00"),
     )
     password: Mapped[str] = mapped_column(String(length=255), nullable=False, info=dto_field("private"))
+    is_activate: Mapped[bool] = mapped_column(Boolean(), nullable=False, default=False)
+    role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False, default=UserRole.user)
 
     books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"),lazy="selectin")
 
