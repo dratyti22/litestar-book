@@ -1,4 +1,5 @@
 from litestar.connection import ASGIConnection
+from litestar.exceptions import HTTPException
 from litestar.security.jwt.auth import OAuth2PasswordBearerAuth
 from litestar.security.jwt.token import Token
 
@@ -13,8 +14,6 @@ async def retrieve_user_handler(
     connection: ASGIConnection,
 ) -> UserDb | None:
     try:
-        connection.logger.debug(f"Received token: {token.__dict__}")
-        print("=== CALLED retrieve_user_handler ===")
         if not token.sub:
             connection.logger.error("Token 'sub' is missing")
             return None
@@ -22,16 +21,14 @@ async def retrieve_user_handler(
         try:
             user_id = int(token.sub)
         except ValueError:
-            connection.logger.error(f"Invalid user ID in token: {token.sub}")
             return None
 
-        connection.logger.debug(f"Searching for user ID: {user_id}")
         async with container() as scope:
             auth_service =await scope.get(AuthService)
             user = await auth_service.get_user_by_id(user_id)
 
         if not user:
-            connection.logger.error(f"User {user_id} not found")
+            raise HTTPException(status_code=403, detail="Invalid user id")
 
         return user
 

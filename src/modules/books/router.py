@@ -9,6 +9,7 @@ from litestar.exceptions import HTTPException
 from litestar.security.jwt import Token
 from sqlalchemy.exc import SQLAlchemyError
 
+from src.infrastructure.guards import admin_user_guard
 from src.modules.books.model import BookDb
 from src.modules.books.protocols import GenreProtocol, BookProtocol
 from src.modules.books.schema import GenresDTO, WriteGenreDTO, WriteBookDTO, PatchBookDTO, \
@@ -24,7 +25,7 @@ class GenreController(Controller):
     async def get_all_genres(self, service: FromDishka[GenreProtocol]) -> list[GenresDTO] | None:
         return await service.get_all_genres()
 
-    @post("/")
+    @post("/", guards=[admin_user_guard])
     @inject
     async def create_genre(self, service: FromDishka[GenreProtocol], data: WriteGenreDTO) -> GenresDTO:
         return await service.create_genre(data)

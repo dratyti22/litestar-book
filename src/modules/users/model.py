@@ -26,10 +26,15 @@ class UserDb(BaseDB):
     is_activate: Mapped[bool] = mapped_column(Boolean(), nullable=False, default=False)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False, default=UserRole.user)
 
-    books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"),lazy="selectin")
+    books: Mapped[list["BookDb"]] = relationship(back_populates="user", info=dto_field("read-only"),
+                                                 lazy="selectin")
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}')>"
 
     def __str__(self) -> str:
         return self.email
+
+    @property
+    async def is_admin(self) -> bool:
+        return self.role == UserRole.admin

@@ -5,6 +5,7 @@ from litestar.router import Router
 from litestar.stores.redis import RedisStore
 
 from .infrastructure.di import container
+from .infrastructure.middleware import CheckUserActivateMiddleware
 from .lists_of_addictions import routes_handlers
 from .logger_config import logging_config
 from .modules.users.auth import oauth2
@@ -20,9 +21,8 @@ def get_app() -> Litestar:
         route_handlers=[base_route],
         stores={"redis_backed_store": redis_store},
         response_cache_config=cache_config,
-        middleware=[oauth2.middleware],
         debug=True,
-        # on_app_init=[oauth2.on_app_init],
+        middleware=[oauth2.middleware, CheckUserActivateMiddleware()],
         logging_config=logging_config,
     )
     oauth2.on_app_init(app)
