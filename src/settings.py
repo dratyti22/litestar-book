@@ -1,7 +1,10 @@
+from typing import List
+
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -21,6 +24,11 @@ class Settings(BaseSettings):
 
     # SECRET
     JWT_SECRET: str = "jwt_secret"
+    CSRF_SECRET: str = "csrf_secret"
+
+    # CORS
+    ALLOWED_ORIGINS: List[str] = ["*"]
+
 
     @property
     def async_database_url(self) -> str:
@@ -28,5 +36,6 @@ class Settings(BaseSettings):
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
             f"{self.DB_HOST}:{self.DB_PORT}/{self.POSTGRES_DB}"
         )
+
 
 settings = Settings()
